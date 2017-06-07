@@ -4,10 +4,23 @@ import connections.dota.AbstractProfile;
 import connections.dota.ApiConnector;
 import exceptions.PrivateDataException;
 
-public class DotaProfile extends Profile
+public class DotaProfile extends AbstractProfile
 {
-	private String playerInfosUrl = "https://api.opendota.com/api/players/{account_id}";
+	private static final String levelMarcador = "solo_competitive_rank";
+	private static final String idMarcador = "account_id";
+	private static final String nameMarcador = "personaname";
+	private static final String nullMarcador = "null";
 	
+	public DotaProfile()
+	{
+		super();
+	}
+	
+	public DotaProfile(String name, long id, long level)
+	{
+		super(name, id, level);
+	}
+
 	@Override
 	public AbstractProfile byName(String[] strings, String region) throws PrivateDataException
 	{
@@ -15,79 +28,79 @@ public class DotaProfile extends Profile
 		String url = playerInfosUrl.replace("{account_id}", strings[0]);
 		String profileInfos = connector.getData(url);
 		String name = getName(profileInfos);
-		long id = Long.parseLong(getId(profileInfos));
-		long level = Long.parseLong(getLevel(profileInfos));
+		long id = getId(profileInfos);
+		long level = getLevel(profileInfos);
 		
-		AbstractProfile profile = new AbstractProfile(name, id, level);
+		AbstractProfile profile = new DotaProfile(name, id, level);
 		return profile;
 	}
 	
 	private String getName(String json) throws PrivateDataException 
 	{
-		String[] infos = json.split(":");
-		boolean name = false;
-		for (String s : infos)
+		String[] infos = json.split(",");
+		for (String info : infos)
 		{
-			if (name)
+			if (info.contains(nameMarcador))
 			{
-				//resolver dps
-				if (s.equals("null"))
+				String name = separarString(info, nameMarcador);
+				if (name.equals(nullMarcador))
 				{
 					throw new PrivateDataException("Campo name é privado");
 				}
-				return s.substring(1, s.indexOf(",")-1);
-			}
-			if (s.contains("personaname"))
-			{
-				name = true;
+				return removerAspas(name);
 			}
 		}
-		return null;
+		throw new PrivateDataException("Campo name é privado");
 	}
 	
-	private String getId(String json) throws PrivateDataException
+	private long getId(String json) throws PrivateDataException
 	{
-		String[] infos = json.split(":");
-		boolean id = false;
+		String[] infos = json.split(",");
 		for (String s : infos)
 		{
-			if (id)
+			if (s.contains(idMarcador))
 			{
-				//resolver dps
-				if (s.equals("null"))
+				String id = separarString(s, idMarcador);
+				if (id.equals(nullMarcador))
 				{
 					throw new PrivateDataException("Campo id é privado");
 				}
-				return s.substring(0, s.indexOf(","));
-			}
-			if (s.contains("account_id"))
-			{
-				id = true;
+				id = removerAspas(id);
+				return Long.parseLong(id);
 			}
 		}
-		return null;
+		throw new PrivateDataException("Campo id é privado");
 	}
 	
-	private String getLevel(String json) throws PrivateDataException
+	private long getLevel(String json) throws PrivateDataException
 	{
-		String[] infos = json.split(":");
-		boolean lvl = false;
-		for (String s : infos)
+		String[] infos = json.split(",");
+		for (String info : infos)
 		{
-			if (lvl)
+			if (info.contains(levelMarcador))
 			{
-				//resolver dps
-				if (s.equals("null"))
+				String level = separarString(info, levelMarcador);
+				
+				if (level.equals(nullMarcador))
 				{
 					throw new PrivateDataException("Campo level é privado");
 				}
-				return s.substring(1, s.indexOf(",")-1);
-			}
-			if (s.contains("solo_competitive_rank"))
-			{
-				lvl = true;
+				
+				level = removerAspas(level);
+				return Long.parseLong(level);
 			}
 		}
-		return null;
+		return Long.MIN_VALUE;
+	}
+	
+	private String separarString(String info, String marcador)
+	{
+		info = info.substring(info.indexOf(marcador));
+		return info.split(":")[1];
+	}
+	
+	private String removerAspas(String info)
+	{
+		return info.substring(1, info.length()-1);
 	}
 }

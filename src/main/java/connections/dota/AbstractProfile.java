@@ -1,13 +1,22 @@
 package connections.dota;
 
-public class AbstractProfile
+import exceptions.PrivateDataException;
+
+public abstract class AbstractProfile
 {
 	private String name;
 	private long id;
 	private long level;
+	public static final String playerInfosUrl = "https://api.opendota.com/api/players/{account_id}";
+	public static final String playerWLUrl = "https://api.opendota.com/api/players/{account_id}/wl";
 
-	public AbstractProfile(String name, long id, long level) {
-		super();
+	public AbstractProfile()
+	{
+		
+	}
+	
+	public AbstractProfile(String name, long id, long level)
+	{
 		this.name = name;
 		this.id = id;
 		this.level = level;
@@ -42,4 +51,6 @@ public class AbstractProfile
 	{
 		this.level = level;
 	}
+
+	public abstract AbstractProfile byName(String[] strings, String region) throws PrivateDataException;
 }
