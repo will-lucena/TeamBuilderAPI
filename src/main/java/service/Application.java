@@ -7,11 +7,12 @@ public class Application
 	private static String playerInfosUrl = "https://api.opendota.com/api/players/{account_id}";
 	private static String playerWLUrl = "https://api.opendota.com/api/players/{account_id}/wl";
 	private static String faiboID = "82383264";
+	private static String nullID = "9338651";
 	
 	public static void main(String[] args)
 	{
 		ApiConnector api = new ApiConnector();
-		String infosUrl = playerInfosUrl.replace("{account_id}", faiboID);
+		String infosUrl = playerInfosUrl.replace("{account_id}", nullID);
 		
 		String[] infos = api.getData(infosUrl).split(":");
 		String dotaName = "";
@@ -24,7 +25,15 @@ public class Application
 		{
 			if (name)
 			{
-				dotaName = s.substring(1, s.indexOf(",")-1);
+				if (s.equals("null"))
+				{
+					System.out.println("erro");
+				}
+				else
+				{
+					dotaName = s.substring(1, s.indexOf(",")-1);
+				}
+				
 				name = false;
 			}
 			if (s.contains("personaname"))
@@ -42,12 +51,12 @@ public class Application
 				id = true;
 			}
 			
-			if (lvl && s.contains(","))
+			if (lvl)
 			{
-				level = s.substring(0, s.indexOf(","));
+				level = s.substring(1, s.indexOf(",")-1);
 				lvl = false;
 			}
-			if (s.contains("estimate"))
+			if (s.contains("solo_competitive_rank"))
 			{
 				lvl = true;
 			}
@@ -55,5 +64,6 @@ public class Application
 		System.out.println(dotaName);
 		System.out.println(accountId);
 		System.out.println(level);
+		System.out.println(api.getData(infosUrl));
 	}
 }
