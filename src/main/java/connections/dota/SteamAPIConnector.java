@@ -26,12 +26,12 @@ public class SteamAPIConnector
 		String url = steamUserUrl.replace("{steamKey}", steamKey).replace("{username}", username);
 		String infos = getData(url);
 		
-		String steam64Id = "";
-		
-		return steam64Id;
+		String id = infos.substring(infos.indexOf("steamid"), infos.indexOf(","));
+		id = id.split(":")[1];
+		return id.substring(2, id.length()-1);
 	}
 	
-	public String getData(String url)
+	private String getData(String url)
 	{
 		String result = "";
 		HttpGet request = new HttpGet(url);
@@ -52,6 +52,11 @@ public class SteamAPIConnector
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public long getSteam32Id(String username)
+	{
+		return converter64To32(get64Id(username));
 	}
 }
 

@@ -7,8 +7,6 @@ public abstract class AbstractProfile
 	private String name;
 	private long id;
 	private long level;
-	public static final String playerInfosUrl = "https://api.opendota.com/api/players/{account_id}";
-	public static final String playerWLUrl = "https://api.opendota.com/api/players/{account_id}/wl";
 
 	public AbstractProfile()
 	{
