@@ -6,19 +6,24 @@ import exceptions.ConnectionException;
 
 public class Application
 {
-	public static void main(String[] args) throws ConnectionException
+	public static void main(String[] args)
 	{
-		String faiboID = "82383264";
-		String nullID = "9338651";
-		String id64 = "76561198042648992";
-		long id = Long.parseLong(id64.substring(3)) - Long.parseLong("61197960265728");
-		System.out.println("id32: " + id);
-		
-		System.out.println();
-		
+		try
+		{
+			buildPlayer("faibo");
+		} catch (ConnectionException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void buildPlayer(String username) throws ConnectionException
+	{
 		String[] ids = new String[1];
-		ids[0] = faiboID;
-		AbstractProfile profile = new DotaProfile().byName(ids, "");
+		ids[0] = username;
+		AbstractProfile profile = new DotaProfile();
+		profile = profile.byName(ids, "");
 		System.out.println(	"ID: " + profile.getId() + "\n" + 
 							"Name: " + profile.getName() + "\n" + 
 							"Solo rank mmr: " + profile.getLevel());
