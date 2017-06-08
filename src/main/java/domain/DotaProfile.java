@@ -1,8 +1,8 @@
 package domain;
 
 import connections.dota.AbstractProfile;
-import connections.dota.ApiConnector;
-import exceptions.PrivateDataException;
+import connections.dota.DotaAPIConnector;
+import exceptions.ConnectionException;
 
 public class DotaProfile extends AbstractProfile
 {
@@ -22,9 +22,9 @@ public class DotaProfile extends AbstractProfile
 	}
 
 	@Override
-	public AbstractProfile byName(String[] strings, String region) throws PrivateDataException
+	public AbstractProfile byName(String[] strings, String region) throws ConnectionException
 	{
-		ApiConnector connector = new ApiConnector();
+		DotaAPIConnector connector = new DotaAPIConnector();
 		String url = playerInfosUrl.replace("{account_id}", strings[0]);
 		String profileInfos = connector.getData(url);
 		String name = getName(profileInfos);
@@ -35,7 +35,7 @@ public class DotaProfile extends AbstractProfile
 		return profile;
 	}
 	
-	private String getName(String json) throws PrivateDataException 
+	private String getName(String json) throws ConnectionException 
 	{
 		String[] infos = json.split(",");
 		for (String info : infos)
@@ -45,15 +45,15 @@ public class DotaProfile extends AbstractProfile
 				String name = separarString(info, nameMarcador);
 				if (name.equals(nullMarcador))
 				{
-					throw new PrivateDataException("Campo name é privado");
+					throw new ConnectionException("Campo name é privado");
 				}
 				return removerAspas(name);
 			}
 		}
-		throw new PrivateDataException("Campo name é privado");
+		throw new ConnectionException("Campo name é privado");
 	}
 	
-	private long getId(String json) throws PrivateDataException
+	private long getId(String json) throws ConnectionException
 	{
 		String[] infos = json.split(",");
 		for (String s : infos)
@@ -63,16 +63,16 @@ public class DotaProfile extends AbstractProfile
 				String id = separarString(s, idMarcador);
 				if (id.equals(nullMarcador))
 				{
-					throw new PrivateDataException("Campo id é privado");
+					throw new ConnectionException("Campo id é privado");
 				}
 				id = removerAspas(id);
 				return Long.parseLong(id);
 			}
 		}
-		throw new PrivateDataException("Campo id é privado");
+		throw new ConnectionException("Campo id é privado");
 	}
 	
-	private long getLevel(String json) throws PrivateDataException
+	private long getLevel(String json) throws ConnectionException
 	{
 		String[] infos = json.split(",");
 		for (String info : infos)
@@ -83,7 +83,7 @@ public class DotaProfile extends AbstractProfile
 				
 				if (level.equals(nullMarcador))
 				{
-					throw new PrivateDataException("Campo level é privado");
+					throw new ConnectionException("Campo level é privado");
 				}
 				
 				level = removerAspas(level);

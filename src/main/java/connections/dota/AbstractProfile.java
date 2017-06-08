@@ -1,6 +1,6 @@
 package connections.dota;
 
-import exceptions.PrivateDataException;
+import exceptions.ConnectionException;
 
 public abstract class AbstractProfile
 {
@@ -52,5 +52,5 @@ public abstract class AbstractProfile
 		this.level = level;
 	}
 
-	public abstract AbstractProfile byName(String[] strings, String region) throws PrivateDataException;
+	public abstract AbstractProfile byName(String[] strings, String region) throws ConnectionException;
 }

@@ -2,7 +2,7 @@ package connections;
 
 import connections.dota.AbstractProfile;
 import domain.DotaProfile;
-import exceptions.PrivateDataException;
+import exceptions.ConnectionException;
 
 public class ApiFacade implements ApiInterface
 {
@@ -13,7 +13,7 @@ public class ApiFacade implements ApiInterface
 		profile = new DotaProfile();
 	}
 
-	public AbstractProfile getProfile(String summoner, String region) throws PrivateDataException
+	public AbstractProfile getProfile(String summoner, String region) throws ConnectionException
 	{
 		return profile.byName(new String[]
 		{ summoner }, region);

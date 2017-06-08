@@ -9,7 +9,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-public class ApiConnector
+public class DotaAPIConnector
 {
 	private CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
