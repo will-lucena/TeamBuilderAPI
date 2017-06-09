@@ -13,7 +13,6 @@ public class DotaAPI
 	private static final String nameMarcador = "personaname";
 	private static final String nullMarcador = "null";
 	private static final String playerInfosUrl = "https://api.opendota.com/api/players/{account_id}";
-	private static final String playerWLUrl = "https://api.opendota.com/api/players/{account_id}/wl";
 	
 	private static DotaAPI instance;
 	
@@ -37,10 +36,10 @@ public class DotaAPI
 		return instance;
 	}
 	
-	public AbstractProfile byName(String[] strings, String region) throws ConnectionException
+	public AbstractProfile buildDotaPlayer(String username) throws ConnectionException
 	{
 		DotaAPIConnector connector = new DotaAPIConnector();
-		long steamId = converterUsernameToSteam32Id(strings[0]);
+		long steamId = converterUsernameToSteam32Id(username);
 		String url = playerInfosUrl.replace("{account_id}", Long.toString(steamId));
 		String profileInfos = connector.getData(url);
 		String name = getName(profileInfos);
@@ -61,12 +60,12 @@ public class DotaAPI
 				String name = separarString(info, nameMarcador);
 				if (name.equals(nullMarcador))
 				{
-					throw new ConnectionException("Campo name Ã© privado");
+					throw new ConnectionException("Campo name é privado");
 				}
 				return removerAspas(name);
 			}
 		}
-		throw new ConnectionException("Campo name Ã© privado");
+		throw new ConnectionException("Campo name é privado");
 	}
 	
 	private long getId(String json) throws ConnectionException
@@ -79,12 +78,12 @@ public class DotaAPI
 				String id = separarString(s, idMarcador);
 				if (id.equals(nullMarcador))
 				{
-					throw new ConnectionException("Campo id Ã© privado");
+					throw new ConnectionException("Campo id é privado");
 				}
 				return Long.parseLong(id);
 			}
 		}
-		throw new ConnectionException("Campo id ï¿½ privado");
+		throw new ConnectionException("Campo id é privado");
 	}
 	
 	private long getLevel(String json) throws ConnectionException
@@ -98,14 +97,14 @@ public class DotaAPI
 				
 				if (level.equals(nullMarcador))
 				{
-					throw new ConnectionException("Campo level Ã© privado");
+					throw new ConnectionException("Campo level é privado");
 				}
 				
 				level = removerAspas(level);
 				return Long.parseLong(level);
 			}
 		}
-		return Long.MIN_VALUE;
+		throw new ConnectionException("Campo level é privado");
 	}
 	
 	private String separarString(String info, String marcador)

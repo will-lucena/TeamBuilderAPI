@@ -1,7 +1,7 @@
 package service;
 
+import connections.ApiFacade;
 import connections.dota.AbstractProfile;
-import domain.DotaProfile;
 import exceptions.ConnectionException;
 
 public class Application
@@ -20,10 +20,8 @@ public class Application
 	
 	public static void buildPlayer(String username) throws ConnectionException
 	{
-		String[] ids = new String[1];
-		ids[0] = username;
-		AbstractProfile profile = new DotaProfile();
-		profile = profile.byName(ids, "");
+		ApiFacade api = new ApiFacade();
+		AbstractProfile profile = api.getProfile(username, "");
 		System.out.println(	"ID: " + profile.getId() + "\n" + 
 							"Name: " + profile.getName() + "\n" + 
 							"Solo rank mmr: " + profile.getLevel());
