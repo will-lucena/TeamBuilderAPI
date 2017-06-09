@@ -4,11 +4,11 @@ import connections.dota.AbstractProfile;
 import domain.DotaProfile;
 import exceptions.ConnectionException;
 
-public class ApiFacade implements ApiInterface
+public class DotaAPIFacade implements ApiInterface
 {
 	private AbstractProfile profile;
 
-	public ApiFacade()
+	public DotaAPIFacade()
 	{
 		profile = new DotaProfile();
 	}
