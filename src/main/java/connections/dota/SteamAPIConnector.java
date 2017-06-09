@@ -59,4 +59,3 @@ public class SteamAPIConnector
 		return converter64To32(get64Id(username));
 	}
 }
-
