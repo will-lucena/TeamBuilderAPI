@@ -1,6 +1,7 @@
-package connections;
+package connections.dota;
 
-import connections.dota.AbstractProfile;
+import connections.AbstractProfile;
+import connections.ApiInterface;
 import domain.DotaProfile;
 import exceptions.ConnectionException;
 

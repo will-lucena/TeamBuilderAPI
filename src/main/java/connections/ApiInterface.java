@@ -1,6 +1,5 @@
 package connections;
 
-import connections.dota.AbstractProfile;
 import exceptions.ConnectionException;
 
 public interface ApiInterface

@@ -1,7 +1,7 @@
 package domain;
 
-import connections.DotaAPI;
-import connections.dota.AbstractProfile;
+import connections.AbstractProfile;
+import connections.dota.DotaAPI;
 import exceptions.ConnectionException;
 
 public class DotaProfile extends AbstractProfile

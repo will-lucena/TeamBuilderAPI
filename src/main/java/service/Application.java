@@ -1,29 +1,39 @@
 package service;
 
-import connections.DotaAPIFacade;
-import connections.dota.AbstractProfile;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
+import connections.AbstractProfile;
+import connections.ApiInterface;
+import connections.dota.DotaAPIFacade;
+import connections.smite.SmiteAPIFacade;
 import exceptions.ConnectionException;
 
 public class Application
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException, ConnectionException
 	{
-		try
-		{
-			buildPlayer("faibo");
-		} catch (ConnectionException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		buildDotaPlayer("faibo");
+		buildSmitePlayer("wGordo");
 	}
 	
-	public static void buildPlayer(String username) throws ConnectionException
+	public static void buildDotaPlayer(String username) throws ConnectionException
 	{
+		System.out.println("=== Dota Player ===");
 		DotaAPIFacade api = new DotaAPIFacade();
 		AbstractProfile profile = api.getProfile(username, "");
 		System.out.println(	"ID: " + profile.getId() + "\n" + 
 							"Name: " + profile.getName() + "\n" + 
-							"Solo rank mmr: " + profile.getLevel());
+							"Solo mmr: " + profile.getLevel());
+	}
+	
+	public static void buildSmitePlayer(String username) throws ConnectionException
+	{
+		System.out.println("=== Smite Player ===");
+		ApiInterface api = new SmiteAPIFacade();
+		AbstractProfile profile = api.getProfile(username, "");
+		System.out.println(	"ID: " + profile.getId() + "\n" + 
+							"Name: " + profile.getName() + "\n" + 
+							"Medium tier: " + profile.getLevel());
 	}
 }

@@ -1,8 +1,6 @@
-package connections;
+package connections.dota;
 
-import connections.dota.AbstractProfile;
-import connections.dota.DotaAPIConnector;
-import connections.dota.SteamAPIConnector;
+import connections.AbstractProfile;
 import domain.DotaProfile;
 import exceptions.ConnectionException;
 
@@ -60,12 +58,12 @@ public class DotaAPI
 				String name = separarString(info, nameMarcador);
 				if (name.equals(nullMarcador))
 				{
-					throw new ConnectionException("Campo name é privado");
+					throw new ConnectionException("Campo name ï¿½ privado");
 				}
 				return removerAspas(name);
 			}
 		}
-		throw new ConnectionException("Campo name é privado");
+		throw new ConnectionException("Campo name ï¿½ privado");
 	}
 	
 	private long getId(String json) throws ConnectionException
@@ -78,12 +76,12 @@ public class DotaAPI
 				String id = separarString(s, idMarcador);
 				if (id.equals(nullMarcador))
 				{
-					throw new ConnectionException("Campo id é privado");
+					throw new ConnectionException("Campo id ï¿½ privado");
 				}
 				return Long.parseLong(id);
 			}
 		}
-		throw new ConnectionException("Campo id é privado");
+		throw new ConnectionException("Campo id ï¿½ privado");
 	}
 	
 	private long getLevel(String json) throws ConnectionException
@@ -97,14 +95,14 @@ public class DotaAPI
 				
 				if (level.equals(nullMarcador))
 				{
-					throw new ConnectionException("Campo level é privado");
+					throw new ConnectionException("Campo level ï¿½ privado");
 				}
 				
 				level = removerAspas(level);
 				return Long.parseLong(level);
 			}
 		}
-		throw new ConnectionException("Campo level é privado");
+		throw new ConnectionException("Campo level ï¿½ privado");
 	}
 	
 	private String separarString(String info, String marcador)
