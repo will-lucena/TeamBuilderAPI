@@ -9,11 +9,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import exceptions.ConnectionException;
+
 public class DotaAPIConnector
 {
 	private CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-	public String getData(String url)
+	public String getData(String url) throws ConnectionException
 	{
 		String result = "";
 		HttpGet request = new HttpGet(url);
@@ -29,8 +31,7 @@ public class DotaAPIConnector
 
 		} catch (ParseException | IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ConnectionException("Não foi possivel realizar o request a API", e);
 		}
 		return result;
 	}

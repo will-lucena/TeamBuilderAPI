@@ -9,11 +9,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import exceptions.ConnectionException;
+
 public class SmiteAPIConnector
 {
 	private CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
-	public String getData(String url)
+	public String getData(String url) throws ConnectionException
 	{
 		String result = "";
 		HttpGet request = new HttpGet(url);
@@ -24,14 +26,12 @@ public class SmiteAPIConnector
 			System.out.println("status code: " + httpResponse.getStatusLine().getStatusCode());
 			if (httpResponse.getStatusLine().getStatusCode() == 200)
 			{
-
 				result = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
 			}
 
 		} catch (ParseException | IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ConnectionException("Não foi possivel realizar o request a API", e);
 		}
 		return result;
 	}

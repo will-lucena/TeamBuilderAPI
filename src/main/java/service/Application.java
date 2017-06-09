@@ -1,8 +1,5 @@
 package service;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 import connections.AbstractProfile;
 import connections.ApiInterface;
 import connections.dota.DotaAPIFacade;
@@ -11,10 +8,17 @@ import exceptions.ConnectionException;
 
 public class Application
 {
-	public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException, ConnectionException
+	public static void main(String[] args)
 	{
-		buildDotaPlayer("faibo");
-		buildSmitePlayer("wGordo");
+		try
+		{
+			buildDotaPlayer("faibo");
+			buildSmitePlayer("wGordo");
+		} catch (ConnectionException e)
+		{
+			System.out.println("Ocorreu um erro de conexão: " + e.getProblem());
+		}
+		
 	}
 	
 	public static void buildDotaPlayer(String username) throws ConnectionException

@@ -78,7 +78,7 @@ public class SmiteAPI
 		
 		if (Long.toString(tier).equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo level é privado");
+			throw new ConnectionException("Campo level é privado", json);
 		}
 		return tier;
 	}
@@ -90,7 +90,7 @@ public class SmiteAPI
 		
 		if (Long.toString(tier).equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo level é privado");
+			throw new ConnectionException("Campo level é privado", json);
 		}
 		return tier;
 	}
@@ -102,7 +102,7 @@ public class SmiteAPI
 		
 		if (Long.toString(tier).equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo level é privado");
+			throw new ConnectionException("Campo level é privado", json);
 		}
 		return tier;
 	}
@@ -114,7 +114,7 @@ public class SmiteAPI
 		
 		if (name.equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo name é privado");
+			throw new ConnectionException("Campo name é privado", json);
 		}
 		return name;
 	}
@@ -126,12 +126,12 @@ public class SmiteAPI
 		
 		if (Long.toString(id).equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo id é privado");
+			throw new ConnectionException("Campo id é privado", json);
 		}
 		return id;
 	}
 
-	private boolean createSession()
+	private boolean createSession() throws ConnectionException
 	{
 		String url = combine(new String[]
 		{ BASE_URL + "createsessionjson", devKey, getSignature("createsession"), getTimestamp() }, "/");
@@ -151,7 +151,7 @@ public class SmiteAPI
 					"/");
 			return this.connector.getData(url);
 		}
-		throw new ConnectionException("N�o foi possivel acessar a API");
+		throw new ConnectionException("Não foi possivel acessar a API");
 	}
 
 	public String ping() throws ConnectionException
@@ -160,7 +160,7 @@ public class SmiteAPI
 		{
 			return this.connector.getData(BASE_URL + "ping" + "json");
 		}
-		throw new ConnectionException("N�o foi possivel acessar a API");
+		throw new ConnectionException("Não foi possivel acessar a API");
 	}
 
 	private boolean isSessionValid()
@@ -198,12 +198,12 @@ public class SmiteAPI
 		return builder.toString();
 	}
 
-	private String getSignature(String method)
+	private String getSignature(String method) throws ConnectionException
 	{
 		return getMD5(devKey + method + authKey + getTimestamp());
 	}
 
-	private String getMD5(String input)
+	private String getMD5(String input) throws ConnectionException
 	{
 		try
 		{
@@ -225,7 +225,7 @@ public class SmiteAPI
 			return stringBuffer.toString();
 		} catch (NoSuchAlgorithmException e)
 		{
-			return null;
+			throw new ConnectionException("Não foi possivel gerar a signature", e);
 		}
 	}
 

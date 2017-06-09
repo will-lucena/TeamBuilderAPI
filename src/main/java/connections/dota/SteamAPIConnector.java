@@ -10,6 +10,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import exceptions.ConnectionException;
+
 public class SteamAPIConnector
 {
 	private static final String steamKey = "C0A26A72E4EC723F45C3EA9543B7B7F1";
@@ -22,7 +24,7 @@ public class SteamAPIConnector
 		return Long.parseLong(steam64Id.substring(3)) - Long.parseLong("61197960265728");
 	}
 	
-	private String get64Id(String username)
+	private String get64Id(String username) throws ConnectionException
 	{
 		String url = steamUserUrl.replace("{steamKey}", steamKey).replace("{username}", username);
 		String response = getData(url);
@@ -31,7 +33,7 @@ public class SteamAPIConnector
 		return Long.toString(object.getLong("steamid"));
 	}
 	
-	private String getData(String url)
+	private String getData(String url) throws ConnectionException
 	{
 		String result = "";
 		HttpGet request = new HttpGet(url);
@@ -42,19 +44,17 @@ public class SteamAPIConnector
 			System.out.println("status code: " + httpResponse.getStatusLine().getStatusCode());
 			if (httpResponse.getStatusLine().getStatusCode() == 200)
 			{
-
 				result = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
 			}
 
 		} catch (ParseException | IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ConnectionException("Não foi possivel realizar o request a API", e);
 		}
 		return result;
 	}
 	
-	public long getSteam32Id(String username)
+	public long getSteam32Id(String username) throws ConnectionException
 	{
 		return converter64To32(get64Id(username));
 	}

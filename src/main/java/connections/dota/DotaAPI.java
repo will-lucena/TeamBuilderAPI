@@ -57,7 +57,7 @@ public class DotaAPI
 		
 		if (name.equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo name é privado");
+			throw new ConnectionException("Campo name é privado", json);
 		}
 		return name;
 	}
@@ -69,7 +69,7 @@ public class DotaAPI
 		
 		if (Long.toString(id).equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo id é privado");
+			throw new ConnectionException("Campo id é privado", json);
 		}
 		return id;
 	}
@@ -81,12 +81,12 @@ public class DotaAPI
 		
 		if (Long.toString(id).equals(nullMarcador))
 		{
-			throw new ConnectionException("Campo solo_rank_mmr é privado");
+			throw new ConnectionException("Campo solo_rank_mmr é privado", json);
 		}
 		return id;
 	}
 
-	private long converterUsernameToSteam32Id(String username)
+	private long converterUsernameToSteam32Id(String username) throws ConnectionException
 	{
 		SteamAPIConnector apiConnector = new SteamAPIConnector();
 		return apiConnector.getSteam32Id(username);
