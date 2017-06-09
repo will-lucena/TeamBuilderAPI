@@ -1,4 +1,4 @@
-package connections.dota;
+package connections.smite;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-public class DotaAPIConnector
+public class SmiteAPIConnector
 {
 	private CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 

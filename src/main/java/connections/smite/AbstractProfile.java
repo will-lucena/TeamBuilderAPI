@@ -1,4 +1,4 @@
-package connections.dota;
+package connections.smite;
 
 import exceptions.ConnectionException;
 

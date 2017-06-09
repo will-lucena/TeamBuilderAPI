@@ -1,6 +1,6 @@
 package connections;
 
-import connections.dota.AbstractProfile;
+import connections.smite.AbstractProfile;
 import exceptions.ConnectionException;
 
 public interface ApiInterface

@@ -1,7 +1,7 @@
 package connections;
 
-import connections.dota.AbstractProfile;
-import domain.DotaProfile;
+import connections.smite.AbstractProfile;
+import domain.SmiteProfile;
 import exceptions.ConnectionException;
 
 public class ApiFacade implements ApiInterface
@@ -10,7 +10,7 @@ public class ApiFacade implements ApiInterface
 
 	public ApiFacade()
 	{
-		profile = new DotaProfile();
+		profile = new SmiteProfile();
 	}
 
 	public AbstractProfile getProfile(String summoner, String region) throws ConnectionException
