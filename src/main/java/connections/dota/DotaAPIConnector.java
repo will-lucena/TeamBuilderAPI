@@ -24,7 +24,6 @@ public class DotaAPIConnector
 			System.out.println("status code: " + httpResponse.getStatusLine().getStatusCode());
 			if (httpResponse.getStatusLine().getStatusCode() == 200)
 			{
-
 				result = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
 			}
 

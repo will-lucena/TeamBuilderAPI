@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.json.JSONObject;
+
 import connections.AbstractProfile;
 import domain.SmiteProfile;
 import exceptions.ConnectionException;
@@ -19,7 +21,8 @@ public class SmiteAPI
 	private static final String BASE_URL = "http://api.smitegame.com/smiteapi.svc/";
 	private long sessionStart;
 	private String sessionId;
-
+	private SmiteAPIConnector connector;
+	
 	private static final String tierConquestMarcador = "Tier_Conquest";
 	private static final String tierDuelMarcador = "Tier_Duel";
 	private static final String tierJoustMarcador = "Tier_Joust";
@@ -30,6 +33,7 @@ public class SmiteAPI
 	private SmiteAPI()
 	{
 		this.sessionStart = 0;
+		this.connector = new SmiteAPIConnector();
 	}
 
 	public static SmiteAPI getInstance()
@@ -69,115 +73,70 @@ public class SmiteAPI
 
 	private long getTierConquest(String json) throws ConnectionException
 	{
-		String[] response = json.split(",");
-		for (String info : response)
+		JSONObject object = new JSONObject(json.substring(1));
+		long tier = object.getLong(tierConquestMarcador);
+		
+		if (Long.toString(tier).equals(nullMarcador))
 		{
-			if (info.contains(tierConquestMarcador))
-			{
-				String level = separarString(info, tierConquestMarcador);
-
-				if (level.equals(nullMarcador))
-				{
-					throw new ConnectionException("Campo level � privado");
-				}
-				return Long.parseLong(level);
-			}
+			throw new ConnectionException("Campo level é privado");
 		}
-		throw new ConnectionException("Campo level � privado");
+		return tier;
 	}
 
 	private long getTierDuel(String json) throws ConnectionException
 	{
-		String[] response = json.split(",");
-		for (String info : response)
+		JSONObject object = new JSONObject(json.substring(1));
+		long tier = object.getLong(tierDuelMarcador);
+		
+		if (Long.toString(tier).equals(nullMarcador))
 		{
-			if (info.contains(tierDuelMarcador))
-			{
-				String level = separarString(info, tierDuelMarcador);
-
-				if (level.equals(nullMarcador))
-				{
-					throw new ConnectionException("Campo level � privado");
-				}
-				return Long.parseLong(level);
-			}
+			throw new ConnectionException("Campo level é privado");
 		}
-		throw new ConnectionException("Campo level � privado");
+		return tier;
 	}
 
 	private long getTierJoust(String json) throws ConnectionException
 	{
-		String[] response = json.split(",");
-		for (String info : response)
+		JSONObject object = new JSONObject(json.substring(1));
+		long tier = object.getLong(tierJoustMarcador);
+		
+		if (Long.toString(tier).equals(nullMarcador))
 		{
-			if (info.contains(tierJoustMarcador))
-			{
-				String level = separarString(info, tierJoustMarcador);
-
-				if (level.equals(nullMarcador))
-				{
-					throw new ConnectionException("Campo level � privado");
-				}
-				return Long.parseLong(level);
-			}
+			throw new ConnectionException("Campo level é privado");
 		}
-		throw new ConnectionException("Campo level � privado");
+		return tier;
 	}
 
 	private String getName(String json) throws ConnectionException
 	{
-		String[] response = json.split(",");
-		for (String info : response)
+		JSONObject object = new JSONObject(json.substring(1));
+		String name = object.getString(nameMarcador);
+		
+		if (name.equals(nullMarcador))
 		{
-			if (info.contains(nameMarcador))
-			{
-				String name = separarString(info, nameMarcador);
-				if (name.equals(nullMarcador))
-				{
-					throw new ConnectionException("Campo name é privado");
-				}
-				return removerAspas(name);
-			}
+			throw new ConnectionException("Campo name é privado");
 		}
-		throw new ConnectionException("Campo name � privado");
+		return name;
 	}
 
 	private long getId(String json) throws ConnectionException
 	{
-		String[] response = json.split(",");
-		for (String s : response)
+		JSONObject object = new JSONObject(json.substring(1));
+		long id = object.getLong(idMarcador);
+		
+		if (Long.toString(id).equals(nullMarcador))
 		{
-			if (s.contains(idMarcador))
-			{
-				String id = separarString(s, idMarcador);
-				if (id.equals(nullMarcador))
-				{
-					throw new ConnectionException("Campo id é privado");
-				}
-				return Long.parseLong(id);
-			}
+			throw new ConnectionException("Campo id é privado");
 		}
-		throw new ConnectionException("Campo id � privado");
+		return id;
 	}
 
-	private String separarString(String info, String marcador)
-	{
-		info = info.substring(info.indexOf(marcador));
-		return info.split(":")[1];
-	}
-
-	private String removerAspas(String info)
-	{
-		return info.substring(1, info.length() - 1);
-	}
-
-	public boolean createSession()
+	private boolean createSession()
 	{
 		String url = combine(new String[]
 		{ BASE_URL + "createsessionjson", devKey, getSignature("createsession"), getTimestamp() }, "/");
-		SmiteAPIConnector connector = new SmiteAPIConnector();
 
-		String response = connector.getData(url);
+		String response = this.connector.getData(url);
 		setSessionId(response);
 		this.sessionStart = System.currentTimeMillis();
 		return true;
@@ -190,9 +149,7 @@ public class SmiteAPI
 			String url = combine(new String[]
 			{ BASE_URL + "getplayerjson", devKey, getSignature("getplayer"), this.sessionId, getTimestamp(), player },
 					"/");
-
-			SmiteAPIConnector connector = new SmiteAPIConnector();
-			return connector.getData(url);
+			return this.connector.getData(url);
 		}
 		throw new ConnectionException("N�o foi possivel acessar a API");
 	}
@@ -201,8 +158,7 @@ public class SmiteAPI
 	{
 		if (isSessionValid() || createSession())
 		{
-			SmiteAPIConnector connector = new SmiteAPIConnector();
-			return connector.getData(BASE_URL + "ping" + "json");
+			return this.connector.getData(BASE_URL + "ping" + "json");
 		}
 		throw new ConnectionException("N�o foi possivel acessar a API");
 	}

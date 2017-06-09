@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 public class SteamAPIConnector
 {
@@ -24,11 +25,10 @@ public class SteamAPIConnector
 	private String get64Id(String username)
 	{
 		String url = steamUserUrl.replace("{steamKey}", steamKey).replace("{username}", username);
-		String infos = getData(url);
-		
-		String id = infos.substring(infos.indexOf("steamid"), infos.indexOf(","));
-		id = id.split(":")[1];
-		return id.substring(2, id.length()-1);
+		String response = getData(url);
+	
+		JSONObject object = new JSONObject(response.substring(response.indexOf("response")+10));
+		return Long.toString(object.getLong("steamid"));
 	}
 	
 	private String getData(String url)
