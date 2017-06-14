@@ -12,11 +12,11 @@ public class Application
 	{
 		try
 		{
-			buildDotaPlayer("anderson.medeiros");
+			buildDotaPlayer("faibo");
 			//buildSmitePlayer("wGordo");
 		} catch (ConnectionException e)
 		{
-			System.out.println("Ocorreu um erro de conexão: " + e.getProblem());
+			System.out.println("Ocorreu um erro de conexão: " + e.getMessage() + " : " + e.getProblem());
 		}
 		
 	}

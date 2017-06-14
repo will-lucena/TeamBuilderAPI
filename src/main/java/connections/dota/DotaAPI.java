@@ -38,6 +38,10 @@ public class DotaAPI
 
 	public AbstractProfile buildDotaPlayer(String username) throws ConnectionException
 	{
+		if (username.contains(" "))
+		{
+			throw new ConnectionException("Api não suporta nicks com espaço", username);
+		}
 		DotaAPIConnector connector = new DotaAPIConnector();
 		long steamId = converterUsernameToSteam32Id(username);
 		String url = playerInfosUrl.replace("{account_id}", Long.toString(steamId));
