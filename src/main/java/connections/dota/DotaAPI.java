@@ -1,5 +1,6 @@
 package connections.dota;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import connections.AbstractProfile;
@@ -89,13 +90,20 @@ public class DotaAPI
 	private long getLevel(String json) throws ConnectionException
 	{
 		JSONObject object = new JSONObject(json);
-		long id = object.getLong(levelMarcador);
+		System.out.println(json);
 		
-		if (Long.toString(id).equals(nullMarcador))
+		try
 		{
-			throw new ConnectionException("Campo solo_rank_mmr é privado", json);
+			long id = object.getLong(levelMarcador);
+			if (Long.toString(id).equals(nullMarcador))
+			{
+				throw new ConnectionException("Campo solo_rank_mmr é privado", json);
+			}
+			return id;
+		} catch (JSONException ex)
+		{
+			throw new ConnectionException("Campo solo_rank_mmr é privado", json); 
 		}
-		return id;
 	}
 
 	private long converterUsernameToSteam32Id(String username) throws ConnectionException

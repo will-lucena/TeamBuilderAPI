@@ -8,11 +8,19 @@ import exceptions.ConnectionException;
 
 public class Application
 {
+	public static final String pro1 = "misterdurst69";
+	public static final String faibo = "faibo";
+	public static final String pro2 = "sunsfan";
+	public static final String pro3 = "jnewsham";
+	public static final String pro4 = "nihiss";
+	public static final String pro5 = "March8";
+	public static final String pro6 = "Malachamavet";
+	
 	public static void main(String[] args)
 	{
 		try
 		{
-			buildDotaPlayer("faibo");
+			buildDotaPlayer("Malachamavet");
 			//buildSmitePlayer("wGordo");
 		} catch (ConnectionException e)
 		{
