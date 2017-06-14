@@ -12,7 +12,7 @@ public class Application
 	{
 		try
 		{
-			buildDotaPlayer("Godot");
+			buildDotaPlayer("anderson.medeiros");
 			//buildSmitePlayer("wGordo");
 		} catch (ConnectionException e)
 		{

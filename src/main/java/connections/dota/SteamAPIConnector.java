@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import exceptions.ConnectionException;
@@ -30,7 +31,15 @@ public class SteamAPIConnector
 		String response = getData(url);
 	
 		JSONObject object = new JSONObject(response.substring(response.indexOf("response")+10));
-		return Long.toString(object.getLong("steamid"));
+		try
+		{
+			long id = object.getLong("steamid");
+			return Long.toString(id);
+		} catch (JSONException ex)
+		{
+			throw new ConnectionException(ex.getMessage(), ex);
+		}
+		
 	}
 	
 	private String getData(String url) throws ConnectionException
