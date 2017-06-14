@@ -1,9 +1,7 @@
 package service;
 
 import connections.AbstractProfile;
-import connections.ApiInterface;
 import connections.dota.DotaAPIFacade;
-import connections.smite.SmiteAPIFacade;
 import exceptions.ConnectionException;
 
 public class Application
@@ -13,7 +11,6 @@ public class Application
 		try
 		{
 			buildDotaPlayer("Godot");
-			//buildSmitePlayer("wGordo");
 		} catch (ConnectionException e)
 		{
 			System.out.println("Ocorreu um erro de conexão: " + e.getProblem());
@@ -29,15 +26,5 @@ public class Application
 		System.out.println(	"ID: " + profile.getId() + "\n" + 
 							"Name: " + profile.getName() + "\n" + 
 							"Solo mmr: " + profile.getLevel());
-	}
-	
-	public static void buildSmitePlayer(String username) throws ConnectionException
-	{
-		System.out.println("=== Smite Player ===");
-		ApiInterface api = new SmiteAPIFacade();
-		AbstractProfile profile = api.getProfile(username, "");
-		System.out.println(	"ID: " + profile.getId() + "\n" + 
-							"Name: " + profile.getName() + "\n" + 
-							"Medium tier: " + profile.getLevel());
 	}
 }
