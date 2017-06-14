@@ -12,8 +12,8 @@ public class Application
 	{
 		try
 		{
-			buildDotaPlayer("faibo");
-			buildSmitePlayer("wGordo");
+			buildDotaPlayer("Godot");
+			//buildSmitePlayer("wGordo");
 		} catch (ConnectionException e)
 		{
 			System.out.println("Ocorreu um erro de conexão: " + e.getProblem());

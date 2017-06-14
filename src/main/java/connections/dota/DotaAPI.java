@@ -52,26 +52,34 @@ public class DotaAPI
 
 	private String getName(String json) throws ConnectionException
 	{
-		JSONObject object = new JSONObject(json.substring(json.indexOf("profile")+9));
-		String name = object.getString(nameMarcador);
-		
-		if (name.equals(nullMarcador))
+		if (json.substring(json.indexOf("profile")+9).startsWith("{"))
 		{
-			throw new ConnectionException("Campo name é privado", json);
+			JSONObject object = new JSONObject(json.substring(json.indexOf("profile")+9));
+			String name = object.getString(nameMarcador);
+			
+			if (name.equals(nullMarcador))
+			{
+				throw new ConnectionException("Campo name é privado", json);
+			}
+			return name;
 		}
-		return name;
+		throw new ConnectionException("Campo name é privado", json);
 	}
 
 	private long getId(String json) throws ConnectionException
 	{
-		JSONObject object = new JSONObject(json.substring(json.indexOf("profile")+9));
-		long id = object.getLong(idMarcador);
-		
-		if (Long.toString(id).equals(nullMarcador))
+		if (json.substring(json.indexOf("profile")+9).startsWith("{"))
 		{
-			throw new ConnectionException("Campo id é privado", json);
+			JSONObject object = new JSONObject(json.substring(json.indexOf("profile")+9));
+			long id = object.getLong(idMarcador);
+			
+			if (Long.toString(id).equals(nullMarcador))
+			{
+				throw new ConnectionException("Campo id é privado", json);
+			}
+			return id;
 		}
-		return id;
+		throw new ConnectionException("Campo id é privado", json);
 	}
 
 	private long getLevel(String json) throws ConnectionException
